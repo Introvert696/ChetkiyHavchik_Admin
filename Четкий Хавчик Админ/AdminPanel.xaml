@@ -1,0 +1,37 @@
+﻿<Window x:Class="Четкий_Хавчик_Админ.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Четкий_Хавчик_Админ"
+        mc:Ignorable="d"
+        Title="Четкий Хавчик: Панель АДмина" Height="606" Width="821">
+    <Grid Loaded="Grid_Loaded">
+
+        <TabControl>
+            <TabItem Header="Заказы">
+                <Grid >
+                    <ListView Height="169" VerticalAlignment="Bottom" Name="orderList" ItemsSource="{DynamicResource ResourceKey=Order}" Margin="0,0,-6,0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_FIO}" Width="160">ФИО</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_Purchases}" Width="150">Заказ</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_Price}" Width="50">Сумма</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_Date}" Width="130">Время заказа</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_Number}" Width="130">Номер телефона</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Order_Comment}" Width="130">Пожелания</GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Content="Заказы:" Margin="10,0,714,177" VerticalAlignment="Bottom"/>
+                    <Button x:Name="updateOrderListBtn" Content="Обновить" HorizontalAlignment="Right" Margin="0,0,19,180" VerticalAlignment="Bottom" Width="88" Click="updateOrderListBtn_Click"/>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

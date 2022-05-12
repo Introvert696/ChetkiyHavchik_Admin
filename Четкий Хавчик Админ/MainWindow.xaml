@@ -1,0 +1,15 @@
+﻿<Window x:Class="Четкий_Хавчик_Админ.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Четкий_Хавчик_Админ"
+        mc:Ignorable="d"
+        Title="Четкий Хвачик: Админ - Вход" Height="153" Width="245" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Токен:" Margin="19,31,0,0" VerticalAlignment="Top" FontWeight="Normal" HorizontalAlignment="Left" Width="63"/>
+        <TextBox x:Name="passTextBox" Margin="73,36,34,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button x:Name="loginBtn" Content="Вход" Margin="89,0,96,24" Height="20" VerticalAlignment="Bottom" Click="loginBtn_Click"/>
+
+    </Grid>
+</Window>

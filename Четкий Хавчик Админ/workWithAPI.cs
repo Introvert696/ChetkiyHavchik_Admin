@@ -12,9 +12,16 @@ namespace Четкий_Хавчик_Админ
 {
     class workWithAPI
     {
+        private static string site = "http://vh522015.eurodir.ru";
+        private static string tokenUrl = site + "/token";
+        private static string itemsUrl = site + "/items";
+        private static string itemsCreateUrl = site + "/items/create";
+        private static string orderUrl = site + "/order";
+        private static string orderDoneUrl = site + "/order/done/";
+
         public static bool checkToken(string token)
         {
-            string url = "http://localhost/token";
+            string url = tokenUrl;
             try {
                 WebRequest request = WebRequest.Create(url);
                 request.Method = "POST"; //метод отправки POST
@@ -60,7 +67,7 @@ namespace Четкий_Хавчик_Админ
         // Получаем все предметы с БД
         public static List<Item> getAllItem()
         {
-            string url = "http://localhost/items";
+            string url = itemsUrl;
             try
             {
                 WebRequest request = WebRequest.Create(url);
@@ -86,10 +93,54 @@ namespace Четкий_Хавчик_Админ
             }
             
         }
+        //добавление предмета в БД
+        public static bool createItem(string token,string name,string desk,string pict,string price)
+        {
+            string url = itemsCreateUrl;
+            try
+            {
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST"; //метод отправки POST
+                                         //данные для отправки, разделяются &
+                string data = "token=" + token+"&name="+name+"&desk="+desk+"&pict="+pict+"&price="+price;
+                //преобразуем данные в массив байтов
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
+                //устанавливаем тип содержимого - параметр ContentType
+                request.ContentType = "application/x-www-form-urlencoded";
+                //устанавливаем заголовок Content-Lenght запроса
+                request.ContentLength = byteArray.Length;
+
+                //записываем данные в поток запроса
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                string responseText = "";
+
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+                return false;
+            }
+
+        }
         // Получаем все заказы с бд
         public static List<Order> getAllOrders(string token)
         {
-            string url = "http://localhost/order";
+            string url = orderUrl;
             try
             {
                 WebRequest request = WebRequest.Create(url);
@@ -130,31 +181,51 @@ namespace Четкий_Хавчик_Админ
             }
 
         }
-        // Преобразовывает строку в лист обьекта Item
-        private static List<Item> stringItemToStringArray(string rawString)
+        //выполнение заказа
+        public static bool doneOrder(int id,string token)
         {
-            //Foo json  = JsonConvert.DeserializeObject<Foo>(str)
-            rawString = rawString.Remove(0, 1);
-            rawString = rawString.Remove(rawString.Length - 1);
-            List<String> stringArr = rawString.Split("}").ToList<String>();
-            stringArr.RemoveAt(stringArr.Count-1);
-
-            
-            List<Item> itemArr = new List<Item>();
-            foreach(string str in stringArr)
+            string url = orderDoneUrl + id;
+            try
             {
-                string strTemp =str+ "}";
-                if (strTemp[0] == ',')
-                {
-                    strTemp = strTemp.Remove(0, 1);
-                }
-                Item rawItem = JsonConvert.DeserializeObject<Item>(strTemp);
-                itemArr.Add(rawItem);
-            }
-            
-            return itemArr;
-        }
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST"; //метод отправки POST
+                                         //данные для отправки, разделяются &
+                string data = "token=" + token;
+                //преобразуем данные в массив байтов
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
+                //устанавливаем тип содержимого - параметр ContentType
+                request.ContentType = "application/x-www-form-urlencoded";
+                //устанавливаем заголовок Content-Lenght запроса
+                request.ContentLength = byteArray.Length;
 
+                //записываем данные в поток запроса
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                string responseText = "";
+
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+
+                
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+                return false;
+            }
+
+        }
+        
 
 
         //==============================================================================//
@@ -184,6 +255,30 @@ namespace Четкий_Хавчик_Админ
             }
             
             return orderArr;
+        }
+        // Преобразовывает строку в лист обьекта Item
+        private static List<Item> stringItemToStringArray(string rawString)
+        {
+            //Foo json  = JsonConvert.DeserializeObject<Foo>(str)
+            rawString = rawString.Remove(0, 1);
+            rawString = rawString.Remove(rawString.Length - 1);
+            List<String> stringArr = rawString.Split("}").ToList<String>();
+            stringArr.RemoveAt(stringArr.Count - 1);
+
+
+            List<Item> itemArr = new List<Item>();
+            foreach (string str in stringArr)
+            {
+                string strTemp = str + "}";
+                if (strTemp[0] == ',')
+                {
+                    strTemp = strTemp.Remove(0, 1);
+                }
+                Item rawItem = JsonConvert.DeserializeObject<Item>(strTemp);
+                itemArr.Add(rawItem);
+            }
+
+            return itemArr;
         }
     }
 }

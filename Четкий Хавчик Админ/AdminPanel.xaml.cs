@@ -38,11 +38,20 @@ namespace Четкий_Хавчик_Админ
         {
             //очистка листвьюшек
             orderList.Items.Clear();
+            itemsList.Items.Clear();
 
-            //добавление в листвьишки
+            //добавление в листвью заказы
             foreach (Order order in ordersArr)
             {
-                orderList.Items.Add(order);
+                if(order.Order_State == 0)
+                {
+                    orderList.Items.Add(order);
+                }
+            }
+            //добавление в листвью предметы
+            foreach (Item item in itemsArr)
+            {
+                itemsList.Items.Add(item);
             }
         }
         //обновление всех массивов и запись их в listView
@@ -52,6 +61,7 @@ namespace Четкий_Хавчик_Админ
             itemsArr = workWithAPI.getAllItem();
             List<Order> rawOrdersArr = workWithAPI.getAllOrders(MainWindow.token);
             ordersArr = normalOrderList(rawOrdersArr);
+
             //добавление всех массивов в лист вью
             addArraysToViews();
         }
@@ -59,21 +69,148 @@ namespace Четкий_Хавчик_Админ
         {
             foreach (Order rawOrder in rawOrderArr)
             {
-                foreach(Item item in itemsArr)
+                foreach (Item item in itemsArr)
                 {
-                    if(rawOrder.Order_Purchases == item.Item_Id.ToString())
+                    if (rawOrder.Order_Purchases == item.Item_Id.ToString())
                     {
                         rawOrder.Order_Purchases = item.Item_Name;
                     }
                 }
             }
             return rawOrderArr;
-            
+
+        }
+        //вставка значений в поля во вкладке "Заказы"
+        private void setOrderValToTextBox(Order order)
+        {
+            idOrderTextBox.Text = order.Order_id.ToString();
+            fioOrderTextBox.Text = order.Order_FIO;
+            numOrderTextBox.Text = order.Order_Number;
+            emailOrderTextBox.Text = order.Order_Email;
+            addressOrderTextBox.Text = order.Order_Address;
+            purchesesOrderTextBox.Text = order.Order_Purchases;
+            priceOrderTextBox.Text = order.Order_Price.ToString();
+            commentOrderTextBox.Text = order.Order_Comment;
+            dateOrderTextBox.Text = order.Order_Date;
+
+        }
+        //вставка значений в поля во вкладке "Предметы"
+        private void setItemValToTextBox(Item item)
+        {
+            idItemTextBox.Text = item.Item_Id.ToString();
+            nameItemTextBox.Text = item.Item_Name;
+            deskItemTextBox.Text = item.Item_Desk;
+            pictItemTextBox.Text = item.Item_Pict;
+            priceItemTextBox.Text = item.Item_Price.ToString();
+        }
+        //получение значений с textbox предметов
+        private string[] getArrWithItemProp()
+        {
+            string[] properites = new string[4];
+            properites[0] = nameItemTextBox.Text;
+            properites[1] = deskItemTextBox.Text;
+            properites[2] = pictItemTextBox.Text;
+            properites[3] = priceItemTextBox.Text;
+            return properites;
+        }
+        //очистка значений в полях во вкладке "Заказы"
+        private void clearOrderTextBox()
+        {
+            idOrderTextBox.Text = "";
+            fioOrderTextBox.Text = "";
+            numOrderTextBox.Text = "";
+            emailOrderTextBox.Text = "";
+            addressOrderTextBox.Text = "";            
+            purchesesOrderTextBox.Text = "";
+            priceOrderTextBox.Text = "";
+            commentOrderTextBox.Text = "";
+            dateOrderTextBox.Text = "";
+        }
+        //очистка значений в полях во вкладке предметы
+        private void clearItemsTextBox()
+        {
+            idItemTextBox.Text = "";
+            nameItemTextBox.Text = "";
+            deskItemTextBox.Text = "";
+            priceItemTextBox.Text = "";
+            pictItemTextBox.Text = "";
         }
 
         private void updateOrderListBtn_Click(object sender, RoutedEventArgs e)
         {
             updateArr();
+        }
+
+        
+
+        private void doneOrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                workWithAPI.doneOrder(Convert.ToInt32(idOrderTextBox.Text), MainWindow.token);
+                updateArr();
+                clearOrderTextBox();
+            }
+            catch
+            {
+                MessageBox.Show("Не выбран заказ");
+            }
+        }
+       
+        
+        private void updateItemBtn_Click(object sender, RoutedEventArgs e)
+        {
+            updateArr();
+        }
+        private void orderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                Order selectedOrder = orderList.SelectedItem as Order;
+                setOrderValToTextBox(selectedOrder);
+            }
+            catch
+            {
+                //обработка "фантомного" изменения
+            }
+        }
+        private void itemsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                Item seletionItem = itemsList.SelectedItem as Item;
+                setItemValToTextBox(seletionItem);
+            }
+            catch
+            {
+
+            }
+
+        }
+
+        private void addItemBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //пытаемся добавить элемент в массив
+            try
+            {
+                //получаем значения всех полей
+                string[] itemsProps = getArrWithItemProp();
+                //создаем предмет в БД
+                workWithAPI.createItem(MainWindow.token, itemsProps[0], itemsProps[1], itemsProps[2], itemsProps[3]);
+                //выводим что предмет создан
+                MessageBox.Show("Предмет создан");
+                //очистка полей
+                clearItemsTextBox();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void clearItemBtn_Click(object sender, RoutedEventArgs e)
+        {
+            clearItemsTextBox();
         }
     }
 }

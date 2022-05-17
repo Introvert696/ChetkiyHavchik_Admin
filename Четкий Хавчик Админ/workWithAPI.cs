@@ -12,12 +12,15 @@ namespace Четкий_Хавчик_Админ
 {
     class workWithAPI
     {
-        private static string site = "http://vh522015.eurodir.ru";
+        private static string site = workWithFile.getUrl();
         private static string tokenUrl = site + "/token";
-        private static string itemsUrl = site + "/items";
-        private static string itemsCreateUrl = site + "/items/create";
         private static string orderUrl = site + "/order";
         private static string orderDoneUrl = site + "/order/done/";
+        private static string orderDeleteUrl = site + "/order/delete/";
+        private static string itemsUrl = site + "/items";
+        private static string itemsCreateUrl = site + "/items/create";
+        private static string itemsDelete = site + "/items/delete/";
+        private static string itemsUpdateUrl = site + "/items/update/";
 
         public static bool checkToken(string token)
         {
@@ -59,7 +62,7 @@ namespace Четкий_Хавчик_Админ
                 }
             }
             catch (Exception ex){
-                MessageBox.Show(ex.Message.ToString());
+                ///MessageBox.Show(ex.Message.ToString());
                 return false;
             }
             
@@ -88,7 +91,7 @@ namespace Четкий_Хавчик_Админ
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+                //MessageBox.Show(ex.Message.ToString());
                 return null;
             }
             
@@ -132,11 +135,99 @@ namespace Четкий_Хавчик_Админ
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+               // MessageBox.Show(ex.Message.ToString());
                 return false;
             }
 
         }
+        //удаление предмета из БД
+        public static bool deleteItem(string token,int id)
+        {
+            string url = itemsDelete + id;
+            try
+            {
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST"; //метод отправки POST
+                                         //данные для отправки, разделяются &
+                string data = "token=" + token;
+                //преобразуем данные в массив байтов
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
+                //устанавливаем тип содержимого - параметр ContentType
+                request.ContentType = "application/x-www-form-urlencoded";
+                //устанавливаем заголовок Content-Lenght запроса
+                request.ContentLength = byteArray.Length;
+
+                //записываем данные в поток запроса
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                string responseText = "";
+
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message.ToString());
+                return false;
+            }
+            
+        }
+        //изменение предмета из БД
+        public static bool updateItem(string token,string id, string name, string desk, string pict, string price)
+        {
+            string url = itemsUpdateUrl+id;
+            try
+            {
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST"; //метод отправки POST
+                                         //данные для отправки, разделяются &
+                string data = "token=" + token + "&name=" + name + "&desk=" + desk + "&pict=" + pict + "&price=" + price;
+                //преобразуем данные в массив байтов
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
+                //устанавливаем тип содержимого - параметр ContentType
+                request.ContentType = "application/x-www-form-urlencoded";
+                //устанавливаем заголовок Content-Lenght запроса
+                request.ContentLength = byteArray.Length;
+
+                //записываем данные в поток запроса
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                string responseText = "";
+
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show(ex.Message.ToString());
+                return false;
+            }
+        }
+
         // Получаем все заказы с бд
         public static List<Order> getAllOrders(string token)
         {
@@ -176,7 +267,7 @@ namespace Четкий_Хавчик_Админ
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+               // MessageBox.Show(ex.Message.ToString());
                 return null;
             }
 
@@ -220,10 +311,53 @@ namespace Четкий_Хавчик_Админ
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+                //MessageBox.Show(ex.Message.ToString());
                 return false;
             }
 
+        }
+        //удаление заказа
+        public static bool deleteOrder(int id, string token)
+        {
+            string url = orderDeleteUrl + id;
+            try
+            {
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST"; //метод отправки POST
+                                         //данные для отправки, разделяются &
+                string data = "token=" + token;
+                //преобразуем данные в массив байтов
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
+                //устанавливаем тип содержимого - параметр ContentType
+                request.ContentType = "application/x-www-form-urlencoded";
+                //устанавливаем заголовок Content-Lenght запроса
+                request.ContentLength = byteArray.Length;
+
+                //записываем данные в поток запроса
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                string responseText = "";
+
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        responseText = reader.ReadToEnd();
+                    }
+                }
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message.ToString());
+                return false;
+            }
         }
         
 

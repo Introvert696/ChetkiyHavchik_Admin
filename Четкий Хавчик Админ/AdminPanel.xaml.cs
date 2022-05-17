@@ -106,11 +106,12 @@ namespace Четкий_Хавчик_Админ
         //получение значений с textbox предметов
         private string[] getArrWithItemProp()
         {
-            string[] properites = new string[4];
+            string[] properites = new string[5];
             properites[0] = nameItemTextBox.Text;
             properites[1] = deskItemTextBox.Text;
             properites[2] = pictItemTextBox.Text;
             properites[3] = priceItemTextBox.Text;
+            properites[4] = idItemTextBox.Text;
             return properites;
         }
         //очистка значений в полях во вкладке "Заказы"
@@ -154,6 +155,7 @@ namespace Четкий_Хавчик_Админ
             catch
             {
                 MessageBox.Show("Не выбран заказ");
+                updateArr();
             }
         }
        
@@ -183,7 +185,7 @@ namespace Четкий_Хавчик_Админ
             }
             catch
             {
-
+                //обработка "фантомного" изменения
             }
 
         }
@@ -201,6 +203,8 @@ namespace Четкий_Хавчик_Админ
                 MessageBox.Show("Предмет создан");
                 //очистка полей
                 clearItemsTextBox();
+                //обновление листвью
+                updateArr();
             }
             catch
             {
@@ -211,6 +215,62 @@ namespace Четкий_Хавчик_Админ
         private void clearItemBtn_Click(object sender, RoutedEventArgs e)
         {
             clearItemsTextBox();
+        }
+
+        private void deleteItemBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                workWithAPI.deleteItem(MainWindow.token, Convert.ToInt32(idItemTextBox.Text));
+                updateArr();
+            }
+            catch(Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());
+                updateArr();
+            }
+        }
+
+        private void updateItemBtn1_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //получаем значения всех полей
+                string[] itemsProps = getArrWithItemProp();
+                //создаем предмет в БД
+                workWithAPI.updateItem(MainWindow.token,itemsProps[4], itemsProps[0], itemsProps[1], itemsProps[2], itemsProps[3]);
+                //выводим что предмет изменен
+                MessageBox.Show("Предмет изменен");
+                //очистка полей
+                clearItemsTextBox();
+                //обновление листвью
+                updateArr();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void deleteOrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //получаем id заказа
+                int orderId = Convert.ToInt32(idOrderTextBox.Text);
+                //оправляем запрос на удаление
+                workWithAPI.deleteOrder(orderId, MainWindow.token);
+                //выводим что заказ удален
+                MessageBox.Show("Заказ удален");
+                //очистка полей
+                clearItemsTextBox();
+                //обновление листвью
+                updateArr();
+            }
+            catch
+            {
+
+            }
         }
     }
 }

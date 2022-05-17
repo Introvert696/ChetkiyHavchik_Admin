@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Четкий_Хавчик_Админ"
         mc:Ignorable="d"
-        Title="Четкий Хавчик: Панель АДмина" Height="606" Width="821">
+        Title="Четкий Хавчик: Панель АДмина" Height="606" Width="821" ResizeMode="NoResize">
     <Grid Loaded="Grid_Loaded">
 
         <TabControl>
@@ -46,6 +46,7 @@
                             <Button x:Name="doneOrderBtn" Content="Выполнить" Margin="0,0,10,10" HorizontalAlignment="Right" Width="126" Height="20" VerticalAlignment="Bottom" Click="doneOrderBtn_Click"/>
                             <Label Content="Id:" HorizontalAlignment="Left" Margin="10,0,0,10" Height="26" VerticalAlignment="Bottom"/>
                             <TextBox x:Name="idOrderTextBox" HorizontalAlignment="Left" Margin="43,0,0,12" TextWrapping="Wrap" Width="104" Height="18" VerticalAlignment="Bottom" IsEnabled="False"/>
+                            <Button x:Name="deleteOrderBtn" Content="Удалить" HorizontalAlignment="Left" Margin="189,0,0,10" VerticalAlignment="Bottom" Width="131" Click="deleteOrderBtn_Click"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -53,7 +54,7 @@
             </TabItem>
             <TabItem Header="Предметы">
                 <Grid  >
-                    <ListView Name="itemsList" ItemsSource="{DynamicResource ResourceKey=Item}" Height="164" VerticalAlignment="Top" Margin="0,398,0,0" SelectionChanged="itemsList_SelectionChanged">
+                    <ListView Name="itemsList" ItemsSource="{DynamicResource ResourceKey=Item}" SelectionChanged="itemsList_SelectionChanged" Margin="0,398,0,0">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Item_Id}" Width="50">Id</GridViewColumn>
@@ -64,7 +65,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <GroupBox Header="Предмет:" Margin="10,10,10,202">
+                    <GroupBox Header="Предмет:" Margin="10,10,10,0" Height="350" VerticalAlignment="Top">
                         <Grid>
                             <Label Content="Id:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                             <TextBox x:Name="idItemTextBox" Margin="110,15,62,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False"/>
@@ -77,8 +78,9 @@
                             <Label Content="Стоимость:" HorizontalAlignment="Left" Margin="9,133,0,0" VerticalAlignment="Top"/>
                             <TextBox x:Name="priceItemTextBox" Margin="110,141,62,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                             <Button x:Name="addItemBtn" Content="Добавить" Margin="0,0,20,10" HorizontalAlignment="Right" Width="158" Height="21" VerticalAlignment="Bottom" Click="addItemBtn_Click"/>
-                            <Button x:Name="deleteItemBtn" Content="Удалить" HorizontalAlignment="Left" Margin="20,0,0,10" Width="151" Height="20" VerticalAlignment="Bottom"/>
+                            <Button x:Name="deleteItemBtn" Content="Удалить" HorizontalAlignment="Left" Margin="20,0,0,10" Width="151" Height="20" VerticalAlignment="Bottom" Click="deleteItemBtn_Click"/>
                             <Button x:Name="clearItemBtn" Content="Очистить" HorizontalAlignment="Left" Margin="560,176,0,0" VerticalAlignment="Top" Width="161" Click="clearItemBtn_Click"/>
+                            <Button x:Name="updateItemBtn1" Content="Изменить" Margin="310,0,311,10" Height="20" VerticalAlignment="Bottom" Click="updateItemBtn1_Click"/>
                         </Grid>
                     </GroupBox>
                     <Label Content="Предметы:" HorizontalAlignment="Left" Margin="10,360,0,0" VerticalAlignment="Top"/>

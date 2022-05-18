@@ -272,5 +272,17 @@ namespace Четкий_Хавчик_Админ
 
             }
         }
+
+        private void exportWordOrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                exportClass.exportWord(MainWindow.token);
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка с экспортом");
+            }
+        }
     }
 }

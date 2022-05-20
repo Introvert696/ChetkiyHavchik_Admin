@@ -275,9 +275,21 @@ namespace Четкий_Хавчик_Админ
 
         private void exportWordOrderBtn_Click(object sender, RoutedEventArgs e)
         {
+            var helper = new exportClass("nakladnaya.doc");
+
+            var items = new Dictionary<string, string>
+            {
+                {"<FIO>",fioOrderTextBox.Text },
+                {"<ZENA>",priceOrderTextBox.Text },
+                {"<ZAKAZ>",purchesesOrderTextBox.Text },
+                {"<ID>",idOrderTextBox.Text }
+            };
+
+            helper.Process(items);
+            MessageBox.Show("Накладная создана");
             try
             {
-                exportClass.exportWord(MainWindow.token);
+                //exportClass.exportWord(MainWindow.token);
             }
             catch
             {

@@ -49,6 +49,7 @@
                             <Button x:Name="deleteOrderBtn" Content="Удалить" HorizontalAlignment="Left" Margin="189,0,0,10" VerticalAlignment="Bottom" Width="131" Click="deleteOrderBtn_Click"/>
                         </Grid>
                     </GroupBox>
+                    <Button x:Name="exportWordOrderBtn" Content="Экспорт накладной" HorizontalAlignment="Right" Margin="0,0,159,180" Width="127" Height="20" VerticalAlignment="Bottom" Click="exportWordOrderBtn_Click"/>
                 </Grid>
 
             </TabItem>
